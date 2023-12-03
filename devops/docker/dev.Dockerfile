@@ -1,14 +1,12 @@
-# python:3.8.18-alpine镜像是基于Alpine Linux发行版构建的.
-# Alpine Linux是一个轻量级的Linux发行版, 这意味着python:3.8.18-alpine镜像的下载速度和部署速度会更快, 同时占用的系统资源会更少.
-# 但是, 由于Alpine Linux发行版的特殊性, 一些常用的命令可能会有所不同. 例如, Alpine Linux发行版中没有bash命令, 而是使用sh命令.
-# 另外, 由于Alpine Linux采用了musl C库而不是glibc, 在构建和运行时可能会遇到一些问题. 例如, 在构建时可能会遇到gcc找不到的头文件, 在运行时可能会遇到一些Python库找不到的问题.
+# python:3.8.18-slim-bullseye镜像是基于Debian Linux发行版构建的.
+# Debian Linux是一个非常流行的Linux发行版, 由于其广泛的应用, Debian Linux发行版的软件包数量非常多.
+# 但是, Debian Linux发行版本身非常庞大, 这意味着python:3.8.18-slim-bullseye镜像的下载速度和部署速度会慢一些, 同时占用的系统资源会更多.
 
-# The python:3.8.18-alpine image is based on the Alpine Linux distribution.
-# Alpine Linux is a lightweight Linux distribution, which means that the python:3.8.18-alpine image can be downloaded and deployed faster, and it consumes fewer system resources.
-# However, due to the specific nature of the Alpine Linux distribution, some common commands may be different. For example, there is no "bash" command in the Alpine Linux distribution, instead, "sh" command is used.
-# Additionally, because Alpine Linux uses the musl C library instead of glibc, you may encounter some issues during the build stage and runtime stage. For example, during the building, you may encounter header files that gcc cannot find, and during the runtime, you may encounter issues with some Python libraries not being found.
+# The python:3.8.18-slim-bullseye image is based on the Debian Linux distribution.
+# Debian Linux is a popular Linux distribution with a wide range of software packages.
+# However, Debian Linux is quite large, which means that the python:3.8.18-slim-bullseye image will be slower to download and deploy, and will consume more system resources.
 
-FROM python:3.8.18-alpine
+FROM python:3.8.18-slim-bullseye
 WORKDIR /app
 COPY requirements.txt /app
 # pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
@@ -26,15 +24,15 @@ CMD [ \
     "--app-dir=/app/app", \
     '--host=${SERVICE_HOST}', \
     "--port=${SERVICE_PORT}", \
-    "--workers=${WEB_CONCURRENCY}" \
+    "--workers=${WEB_CONCURRENCY}", \
     "--loop=uvloop", \
     "--http=httptools", \
     "--interface=asgi3", \
     "--log-level=debug", \
     " --access-log", \
     "--root-path=/", \
-    "--limit-concurrency=1024" \
-    "--backlog=64" \
-    "--timeout-keep-alive=5" \
+    "--limit-concurrency=1024", \
+    "--backlog=64", \
+    "--timeout-keep-alive=5", \
     "--timeout-graceful-shutdown=5" \
 ]

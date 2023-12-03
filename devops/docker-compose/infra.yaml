@@ -1,22 +1,22 @@
 version: "3.7"
 services:
-  mysql:
-    image: mysql:5.7
-    container_name: mysql-svc
-    ports:
-      - 3306:3306
-    restart: always
-    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    env_file: ../../.env.secret
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ${MYSQL_USER_USERNAME}
-      MYSQL_PASS: ${MYSQL_USER_PASSWORD}
-    volumes:
-      - mysql-5_7-data:/var/lib/mysql
-    networks:
-      infra_subnet:
-        ipv4_address: 172.20.0.10
+  # mysql:
+  #   image: mysql:5.7
+  #   container_name: mysql-svc
+  #   ports:
+  #     - 3306:3306
+  #   restart: always
+  #   command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+  #   env_file: ../../.env.secret
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  #     MYSQL_USER: ${MYSQL_USER_USERNAME}
+  #     MYSQL_PASS: ${MYSQL_USER_PASSWORD}
+  #   volumes:
+  #     - mysql-5_7-data:/var/lib/mysql
+  #   networks:
+  #     infra_subnet:
+  #       ipv4_address: 172.20.0.10
 
   redis:
     image: redis:6.2-rc-alpine3.12
@@ -37,116 +37,116 @@ services:
       infra_subnet:
         ipv4_address: 172.20.0.11
 
-  # Note: The total number of nodes on a replica set scenario cannot be higher than 8
-  # (1 primary, 6 secondaries and 1 arbiter)
-  mongodb-primary:
-    image: bitnami/mongodb:6.0
-    container_name: mongodb-primary-svc
-    ports:
-      - 27117:27117
-    env_file: ../../.env.secret
-    environment:
-      MONGODB_PORT_NUMBER: 27117
-      MONGODB_REPLICA_SET_MODE: primary
-      MONGODB_REPLICA_SET_NAME: replicaset
-      MONGODB_REPLICA_SET_KEY: replicasetkey123
-      MONGODB_ADVERTISED_HOSTNAME: "172.20.0.12"
-      MONGODB_ROOT_USER: ${MONGO_ROOT_USERNAME}
-      MONGODB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
-    volumes:
-      - mongodb-data:/bitnami/mongodb
-    networks:
-      infra_subnet:
-        ipv4_address: 172.20.0.12
+  # # Note: The total number of nodes on a replica set scenario cannot be higher than 8
+  # # (1 primary, 6 secondaries and 1 arbiter)
+  # mongodb-primary:
+  #   image: bitnami/mongodb:6.0
+  #   container_name: mongodb-primary-svc
+  #   ports:
+  #     - 27117:27117
+  #   env_file: ../../.env.secret
+  #   environment:
+  #     MONGODB_PORT_NUMBER: 27117
+  #     MONGODB_REPLICA_SET_MODE: primary
+  #     MONGODB_REPLICA_SET_NAME: replicaset
+  #     MONGODB_REPLICA_SET_KEY: replicasetkey123
+  #     MONGODB_ADVERTISED_HOSTNAME: "172.20.0.12"
+  #     MONGODB_ROOT_USER: ${MONGO_ROOT_USERNAME}
+  #     MONGODB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+  #   volumes:
+  #     - mongodb-data:/bitnami/mongodb
+  #   networks:
+  #     infra_subnet:
+  #       ipv4_address: 172.20.0.12
 
-  mongodb-secondary-01:
-    image: bitnami/mongodb:6.0
-    container_name: mongodb-secondary-01-svc
-    ports:
-      - 27118:27118
-    depends_on:
-      - mongodb-primary
-    env_file: ../../.env.secret
-    environment:
-      MONGODB_PORT_NUMBER: 27118
-      MONGODB_REPLICA_SET_MODE: secondary
-      MONGODB_REPLICA_SET_NAME: replicaset
-      MONGODB_REPLICA_SET_KEY: replicasetkey123
-      MONGODB_INITIAL_PRIMARY_HOST: "172.20.0.12"
-      MONGODB_INITIAL_PRIMARY_PORT_NUMBER: 27117
-      MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
-    networks:
-      infra_subnet:
-        ipv4_address: 172.20.0.13
+  # mongodb-secondary-01:
+  #   image: bitnami/mongodb:6.0
+  #   container_name: mongodb-secondary-01-svc
+  #   ports:
+  #     - 27118:27118
+  #   depends_on:
+  #     - mongodb-primary
+  #   env_file: ../../.env.secret
+  #   environment:
+  #     MONGODB_PORT_NUMBER: 27118
+  #     MONGODB_REPLICA_SET_MODE: secondary
+  #     MONGODB_REPLICA_SET_NAME: replicaset
+  #     MONGODB_REPLICA_SET_KEY: replicasetkey123
+  #     MONGODB_INITIAL_PRIMARY_HOST: "172.20.0.12"
+  #     MONGODB_INITIAL_PRIMARY_PORT_NUMBER: 27117
+  #     MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+  #   networks:
+  #     infra_subnet:
+  #       ipv4_address: 172.20.0.13
 
-  mongodb-secondary-02:
-    image: bitnami/mongodb:6.0
-    container_name: mongodb-secondary-02-svc
-    ports:
-      - 27119:27119
-    depends_on:
-      - mongodb-primary
-    env_file: ../../.env.secret
-    environment:
-      MONGODB_PORT_NUMBER: 27119
-      MONGODB_REPLICA_SET_MODE: secondary
-      MONGODB_REPLICA_SET_NAME: replicaset
-      MONGODB_REPLICA_SET_KEY: replicasetkey123
-      MONGODB_INITIAL_PRIMARY_HOST: "172.20.0.12"
-      MONGODB_INITIAL_PRIMARY_PORT_NUMBER: 27117
-      MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
-    networks:
-      infra_subnet:
-        ipv4_address: 172.20.0.14
+  # mongodb-secondary-02:
+  #   image: bitnami/mongodb:6.0
+  #   container_name: mongodb-secondary-02-svc
+  #   ports:
+  #     - 27119:27119
+  #   depends_on:
+  #     - mongodb-primary
+  #   env_file: ../../.env.secret
+  #   environment:
+  #     MONGODB_PORT_NUMBER: 27119
+  #     MONGODB_REPLICA_SET_MODE: secondary
+  #     MONGODB_REPLICA_SET_NAME: replicaset
+  #     MONGODB_REPLICA_SET_KEY: replicasetkey123
+  #     MONGODB_INITIAL_PRIMARY_HOST: "172.20.0.12"
+  #     MONGODB_INITIAL_PRIMARY_PORT_NUMBER: 27117
+  #     MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+  #   networks:
+  #     infra_subnet:
+  #       ipv4_address: 172.20.0.14
 
-  zk:
-    image: zookeeper:3.5.9
-    container_name: zookeeper-svc
-    ports:
-      - 2181:2181
-    restart: always
-    env_file: ../../.env.secret
-    environment:
-      ZOO_MY_ID: 1
-      ZOO_SERVERS: server.1=0.0.0.0:2888:3888;2181
-    volumes:
-      - zookeeper-data:/data
-      - zookeeper-datalog:/datalog
-    networks:
-      infra_subnet:
-        ipv4_address: 172.20.0.15
+  # zk:
+  #   image: zookeeper:3.5.9
+  #   container_name: zookeeper-svc
+  #   ports:
+  #     - 2181:2181
+  #   restart: always
+  #   env_file: ../../.env.secret
+  #   environment:
+  #     ZOO_MY_ID: 1
+  #     ZOO_SERVERS: server.1=0.0.0.0:2888:3888;2181
+  #   volumes:
+  #     - zookeeper-data:/data
+  #     - zookeeper-datalog:/datalog
+  #   networks:
+  #     infra_subnet:
+  #       ipv4_address: 172.20.0.15
 
-  kafka:
-    image: wurstmeister/kafka:2.11-1.1.1
-    container_name: kafka-svc
-    ports:
-      - 9092:9092
-    restart: always
-    depends_on:
-      - zk
-    env_file: ../../.env.secret
-    environment:
-      KAFKA_ADVERTISED_HOST_NAME: ${KAFKA_ADVERTISED_HOST_NAME}
-      KAFKA_ADVERTISED_PORT: 9092
-      KAFKA_ZOOKEEPER_CONNECT: "172.20.0.15:2181"
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
-      KAFKA_DELETE_TOPIC_ENABLE: "true"
-      KAFKA_CREATE_TOPICS: ${KAFKA_CREATE_TOPICS}
-      KAFKA_COMPRESSION_TYPE: producer
-      KAFKA_MESSAGE_MAX_BYTES: 4194304
-      KAFKA_LOG_DIRS: /var/lib/kafka/disk
-      KAFKA_LOG_CLEANUP_POLICY: delete
-      kAFKA_LOG_CLEANER_ENABLE: "false"
-      KAFKA_LOG_SEGMENT_BYTES: 209715200
-      KAFKA_LOG_SEGMENT_DELETE_DELAY_MS: 60000
-      KAFKA_LOG_RETENTION_BYTES: 209715200
-      KAFKA_LOG_RETENTION_HOURS: 24
-    volumes:
-      - kafka-data:/var/lib/kafka/disk
-      - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      infra_subnet:
-        ipv4_address: 172.20.0.16
+  # kafka:
+  #   image: wurstmeister/kafka:2.11-1.1.1
+  #   container_name: kafka-svc
+  #   ports:
+  #     - 9092:9092
+  #   restart: always
+  #   depends_on:
+  #     - zk
+  #   env_file: ../../.env.secret
+  #   environment:
+  #     KAFKA_ADVERTISED_HOST_NAME: ${KAFKA_ADVERTISED_HOST_NAME}
+  #     KAFKA_ADVERTISED_PORT: 9092
+  #     KAFKA_ZOOKEEPER_CONNECT: "172.20.0.15:2181"
+  #     KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+  #     KAFKA_DELETE_TOPIC_ENABLE: "true"
+  #     KAFKA_CREATE_TOPICS: ${KAFKA_CREATE_TOPICS}
+  #     KAFKA_COMPRESSION_TYPE: producer
+  #     KAFKA_MESSAGE_MAX_BYTES: 4194304
+  #     KAFKA_LOG_DIRS: /var/lib/kafka/disk
+  #     KAFKA_LOG_CLEANUP_POLICY: delete
+  #     kAFKA_LOG_CLEANER_ENABLE: "false"
+  #     KAFKA_LOG_SEGMENT_BYTES: 209715200
+  #     KAFKA_LOG_SEGMENT_DELETE_DELAY_MS: 60000
+  #     KAFKA_LOG_RETENTION_BYTES: 209715200
+  #     KAFKA_LOG_RETENTION_HOURS: 24
+  #   volumes:
+  #     - kafka-data:/var/lib/kafka/disk
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   networks:
+  #     infra_subnet:
+  #       ipv4_address: 172.20.0.16
 
 volumes:
   mysql-5_7-data:

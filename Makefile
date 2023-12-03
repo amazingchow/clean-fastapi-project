@@ -11,6 +11,14 @@ help: ### Display this help screen.
 deps: ### Package the runtime requirements.
 	@pip freeze > requirements.txt
 
+.PHONY: local_run_task_worker
+local_run_task_worker: ### Run the celery worker.
+	@(celery -A celery_app.app.celery_app_instance worker --concurrency=1 --pool=prefork --loglevel=DEBUG)
+
+.PHONY: local_run_task_dashboard
+local_run_task_dashboard: ### Run the celery dashboard.
+	@(celery -A celery_app.app.celery_app_instance flower --port=${CELERY_DASHBOARD_PORT})
+
 .PHONY: run_infra
 run_infra: ### Run the infra.
 	@(docker-compose -f "${CURR_DIR}/devops/docker-compose/infra.yaml" up -d --build)
