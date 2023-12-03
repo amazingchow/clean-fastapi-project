@@ -1,0 +1,1 @@
+# clean-fastapi-project
