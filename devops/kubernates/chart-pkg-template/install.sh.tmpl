@@ -1,0 +1,3 @@
+#!/bin/bash
+
+helm upgrade --install ${service_name} --namespace ${service_namespace} -f values.override.yaml . 

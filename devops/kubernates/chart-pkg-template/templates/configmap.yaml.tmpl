@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "${service_name}.fullname" . }}-config
+  namespace: ${service_namespace}
+  labels:
+    app.kubernetes.io/name: {{ include "${service_name}.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "${service_name}.chart" . }}
+data:
+  ${service_name}.json: |-

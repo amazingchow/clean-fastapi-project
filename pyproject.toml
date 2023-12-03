@@ -1,0 +1,29 @@
+# 项目元数据
+[project]
+name = "your_project_name"
+version = "0.1.0"
+description = "Your project description"
+authors = ["Your Name <your_email@example.com>"]
+
+# 构建系统
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+# 依赖管理
+[tool.poetry]
+name = "your_project_name"
+version = "0.1.0"
+description = "Your project description"
+authors = ["Your Name <your_email@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+# 添加其他依赖项
+
+[tool.poetry.dev-dependencies]
+# 添加开发依赖项
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

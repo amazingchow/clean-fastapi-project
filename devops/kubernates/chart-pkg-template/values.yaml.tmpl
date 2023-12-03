@@ -1,0 +1,66 @@
+# Default values for ${service_name}.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: ${docker_image_name}
+  tag: ${docker_image_tag}
+  pullPolicy: IfNotPresent
+  pullSecrets:
+    - name: ${docker_pull_secret}
+
+nameOverride: "${service_name}"
+fullnameOverride: "${service_name}"
+
+resources:
+  limits:
+    cpu: ${service_resource_usage_limit_cpu}
+    memory: ${service_resource_usage_limit_mem}
+  requests:
+    cpu: ${service_resource_usage_request_cpu}
+    memory: ${service_resource_usage_request_mem}
+
+% if enable_k8s_service:
+service:
+  enabled: true
+  type: ${service_net_type}
+  % if enable_k8s_service_http:
+  httpPort: ${service_net_http_port}
+  % endif
+  % if enable_k8s_service_grpc:
+  grpcPort: ${service_net_grpc_port}
+  % endif
+  % if enable_k8s_metrics:
+  metricsPort: ${metrics_port}
+  % endif
+% endif
+
+% if enable_k8s_ingress:
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+% endif
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# 集群模式配置
+# affinity:
+#   nodeAffinity:
+#     requiredDuringSchedulingIgnoredDuringExecution:
+#       nodeSelectorTerms:
+#       - matchExpressions:
+#         - key: kubernetes.io/hostname
+#           operator: In
+#           values:
+#           - k8s-master1
+#           - k8s-master2
+#           - k8s-master3
+
+timezone: Asia/Shanghai
